@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorldKeeper</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-title">
+            <h1>WorldKeeper</h1>
+            <span class="header-subtitle">Tiered Backup Retention for Hytale</span>
+        </div>
+        <div class="header-actions">
+            <button id="createBackup" class="btn btn-primary">Create Backup Now</button>
+            <button id="refreshBackups" class="btn btn-secondary">Refresh</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="stats" class="stats-container">
+            <div class="stat-card">
+                <h3>Total Backups</h3>
+                <p id="totalBackups" class="stat-value">-</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Size</h3>
+                <p id="totalSize" class="stat-value">-</p>
+            </div>
+            <div class="stat-card">
+                <h3>Last Backup</h3>
+                <p id="lastBackup" class="stat-value">-</p>
+            </div>
+            <div class="stat-card">
+                <h3>Snapshots</h3>
+                <p id="sonCount" class="stat-value">-</p>
+            </div>
+            <div class="stat-card">
+                <h3>Dailies</h3>
+                <p id="fatherCount" class="stat-value">-</p>
+            </div>
+            <div class="stat-card">
+                <h3>Archives</h3>
+                <p id="grandfatherCount" class="stat-value">-</p>
+            </div>
+        </section>
+
+        <section class="config-section">
+            <button class="config-toggle" id="configToggle">Active Configuration</button>
+            <div class="config-panel hidden" id="configPanel">
+                <div class="config-grid" id="configGrid"></div>
+            </div>
+        </section>
+
+        <section id="backups" class="backups-section">
+            <div class="tier-section">
+                <h2 class="tier-title tier-archive" id="archiveTitle">Archives</h2>
+                <div id="grandfatherTable" class="backup-table"></div>
+            </div>
+
+            <div class="tier-section">
+                <h2 class="tier-title tier-daily" id="dailyTitle">Dailies</h2>
+                <div id="fatherTable" class="backup-table"></div>
+            </div>
+
+            <div class="tier-section">
+                <h2 class="tier-title tier-snapshot" id="snapshotTitle">Snapshots</h2>
+                <div id="sonTable" class="backup-table"></div>
+            </div>
+        </section>
+    </main>
+
+    <div id="notification" class="notification hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

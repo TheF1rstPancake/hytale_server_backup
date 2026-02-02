@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.gfsbackup</groupId>
+    <artifactId>hytale-gfs-backup</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>Hytale GFS Backup</name>
+    <description>Grandfather-Father-Son backup retention with web UI</description>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <hytale.server.version>0.0.1</hytale.server.version>
+        <jetty.version>12.1.4</jetty.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>hytale-release</id>
+            <url>https://maven.hytale.com/release</url>
+        </repository>
+        <repository>
+            <id>hytale-modding</id>
+            <url>https://maven.hytalemodding.dev/releases</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Hytale Server API (provided by server) -->
+        <dependency>
+            <groupId>com.hypixel.hytale</groupId>
+            <artifactId>Server</artifactId>
+            <version>${hytale.server.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jetty for embedded web server -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.ee10</groupId>
+            <artifactId>jetty-ee10-servlet</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-session</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-security</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+
+        <!-- Gson for JSON serialization -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
+        <!-- Guava for utilities -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.3.1-jre</version>
+        </dependency>
+
+        <!-- SLF4J for logging (provided by server) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.16</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Shade Plugin to create uber JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <minimizeJar>false</minimizeJar>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>manifest.json</include>
+                    <include>default-config.json</include>
+                    <include>webapp/**</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+</project>

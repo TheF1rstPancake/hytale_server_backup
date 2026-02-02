@@ -1,0 +1,44 @@
+{
+  "enabled": true,
+  "backupFolder": "backups",
+  "worldFolder": "universe",
+  "tiers": {
+    "son": {
+      "enabled": true,
+      "intervalMinutes": 30,
+      "retentionCount": 12,
+      "description": "30-minute backups for 6 hours"
+    },
+    "father": {
+      "enabled": true,
+      "intervalMinutes": 1440,
+      "retentionCount": 7,
+      "description": "Daily backups for 7 days"
+    },
+    "grandfather": {
+      "enabled": true,
+      "intervalMinutes": 10080,
+      "retentionCount": 4,
+      "description": "Weekly backups for 4 weeks"
+    }
+  },
+  "hooks": {
+    "preBackup": [
+      "say [WorldKeeper] Starting backup..."
+    ],
+    "postBackup": [
+      "say [WorldKeeper] Backup complete!"
+    ]
+  },
+  "webServer": {
+    "enabled": true,
+    "port": 8081,
+    "allowRestore": false,
+    "allowedIPs": []
+  },
+  "advanced": {
+    "serverSaveBeforeBackup": true,
+    "deleteEmptyBackups": true,
+    "asyncBackup": true
+  }
+}

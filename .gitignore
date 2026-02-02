@@ -1,0 +1,22 @@
+# Build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Maven
+dependency-reduced-pom.xml
+
+# Root-level duplicate manifest (build artifact)
+manifest.json
