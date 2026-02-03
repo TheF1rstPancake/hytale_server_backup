@@ -27,18 +27,6 @@ jobs:
           java-version: 21
           cache: maven
 
-      # If the Hytale Maven repos are unavailable, place HytaleServer.jar
-      # in lib/ and uncomment the step below:
-      #
-      # - name: Install Hytale Server API from local lib
-      #   run: |
-      #     mvn install:install-file \
-      #       -Dfile=lib/HytaleServer.jar \
-      #       -DgroupId=com.hypixel.hytale \
-      #       -DartifactId=Server \
-      #       -Dversion=0.0.1 \
-      #       -Dpackaging=jar
-
       - name: Build
         run: mvn clean package --batch-mode --no-transfer-progress
 

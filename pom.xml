@@ -17,7 +17,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hytale.server.version>0.0.1</hytale.server.version>
+        <hytale.server.version>2026.01.28-87d03be09</hytale.server.version>
         <jetty.version>12.1.4</jetty.version>
     </properties>
 
