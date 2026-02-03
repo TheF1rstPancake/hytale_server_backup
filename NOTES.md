@@ -6,12 +6,45 @@ Things we learned the hard way during development. Useful if you're picking this
 
 There are **no official API docs** as of February 2026. Everything here was reverse-engineered.
 
+### Maven dependency
+
+The Hytale Server API is published to the official Maven repository. Use it as a `provided` dependency (the server supplies it at runtime):
+
+```xml
+<repository>
+    <id>hytale-release</id>
+    <url>https://maven.hytale.com/release</url>
+</repository>
+
+<dependency>
+    <groupId>com.hypixel.hytale</groupId>
+    <artifactId>Server</artifactId>
+    <version>2026.01.28-87d03be09</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+**Version format** is `YYYY.MM.DD-<git-short-hash>`. Browse available versions at:
+`https://maven.hytale.com/release/com/hypixel/hytale/Server/maven-metadata.xml`
+
+There is also a pre-release repo at `https://maven.hytale.com/pre-release` with newer builds.
+
+**Do not use a made-up version like `0.0.1`** and manually install the JAR — it won't resolve in CI. We learned this the hard way: the build worked locally (because the JAR was in `~/.m2`) but failed in GitHub Actions.
+
+### Reference projects
+
+- [HytaleModding/plugin-template](https://github.com/HytaleModding/plugin-template) — official community template (Gradle + ScaffoldIt plugin)
+- [nitrado/hytale-plugin-webserver](https://github.com/nitrado/hytale-plugin-webserver) — Maven-based, good reference for pom.xml structure
+- [nitrado/hytale-plugin-workflows](https://github.com/nitrado/hytale-plugin-workflows) — reusable GitHub Actions workflows for Hytale plugins
+- [Build-9/Hytale-Example-Project](https://github.com/Build-9/Hytale-Example-Project) — Gradle example with local `libs/` JAR approach
+
 ### Where to find information
 
 1. **Decompile the server JAR**: `javap -cp HytaleServer.jar -p <classname>` to get method signatures
 2. **Read existing mod JARs**: The Nitrado mods in the `mods/` folder show real-world API usage. Decompile them with `javap` or a tool like CFR/Fernflower.
 3. **Maven repos**:
-   - Official: `https://maven.hytale.com/release`
+   - Official release: `https://maven.hytale.com/release`
+   - Official pre-release: `https://maven.hytale.com/pre-release`
    - Community: `https://maven.hytalemodding.dev/releases`
 
 ### Key API classes
