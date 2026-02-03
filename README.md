@@ -31,39 +31,27 @@ New backups always start as Snapshots. The oldest Snapshot is promoted to a Dail
 
 ## Installation
 
-### Prerequisites
+### Quick Install (Recommended)
 
-- Java 21+
-- Maven 3.6+
-- Hytale dedicated server
+1. Download `hytale-gfs-backup-1.0.0.jar` from the [latest release](../../releases/latest)
+2. Copy it to your Hytale `Server/mods/` folder
+3. Restart the server
 
-### Build
+That's it. On first startup, WorldKeeper creates its config at `mods/com.gfsbackup_WorldKeeper/config.json`.
+
+### Build from Source
+
+If you want to build the mod yourself instead of using the precompiled JAR:
+
+**Prerequisites:** Java 21+, Maven 3.6+
 
 ```bash
-# Install the Hytale Server API to your local Maven repo (one-time setup)
-mvn install:install-file \
-  -Dfile=/path/to/HytaleServer.jar \
-  -DgroupId=com.hypixel.hytale \
-  -DartifactId=Server \
-  -Dversion=0.0.1 \
-  -Dpackaging=jar
-
 # Build the mod
 mvn clean package
-```
 
-Output: `target/hytale-gfs-backup-1.0.0.jar`
-
-### Deploy
-
-```bash
 # Copy to server mods folder
 cp target/hytale-gfs-backup-1.0.0.jar /path/to/Server/mods/
-
-# Restart the Hytale server
 ```
-
-On first startup, WorldKeeper creates its config at `mods/com.gfsbackup_WorldKeeper/config.json`.
 
 ### Disable AdminUI Backups
 
