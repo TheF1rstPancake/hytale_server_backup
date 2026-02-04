@@ -19,4 +19,4 @@ Thumbs.db
 dependency-reduced-pom.xml
 
 # Root-level duplicate manifest (build artifact)
-manifest.json
+/manifest.json

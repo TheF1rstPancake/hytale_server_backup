@@ -1,0 +1,18 @@
+{
+  "Group": "com.gfsbackup",
+  "Name": "WorldKeeper",
+  "Version": "1.0.0",
+  "Main": "com.gfsbackup.hytale.GFSBackupPlugin",
+  "ServerVersion": "*",
+  "Description": "Smart tiered backup retention for Hytale servers",
+  "Authors": [
+    {
+      "Name": "WorldKeeper"
+    }
+  ],
+  "Website": "https://github.com/WorldKeeper/hytale-gfs-backup",
+  "Dependencies": {},
+  "OptionalDependencies": {},
+  "DisabledByDefault": false,
+  "IncludesAssetPack": false
+}
