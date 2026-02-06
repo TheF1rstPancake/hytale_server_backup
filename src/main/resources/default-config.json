@@ -1,6 +1,6 @@
 {
   "enabled": true,
-  "backupFolder": "backups",
+  "backupFolder": "backups/worldkeeper",
   "worldFolder": "universe",
   "tiers": {
     "son": {

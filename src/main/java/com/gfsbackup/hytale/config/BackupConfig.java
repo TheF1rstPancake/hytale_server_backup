@@ -4,7 +4,7 @@ import java.util.List;
 
 public class BackupConfig {
     private boolean enabled = true;
-    private String backupFolder = "backups";
+    private String backupFolder = "backups/worldkeeper";
     private String worldFolder = "universe";
     private TierConfig tiers = new TierConfig();
     private HookConfig hooks = new HookConfig();
