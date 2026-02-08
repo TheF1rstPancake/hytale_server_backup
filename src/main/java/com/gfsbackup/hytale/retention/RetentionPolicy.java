@@ -47,35 +47,29 @@ public class RetentionPolicy {
     }
 
     private void promoteBackups(long now, List<BackupMetadata> sons, List<BackupMetadata> fathers, List<BackupMetadata> grandfathers) {
-        if (config.getTiers().getFather().isEnabled() && !sons.isEmpty()) {
-            long fatherInterval = config.getTiers().getFather().getIntervalMillis();
+        // Promote SON to FATHER if we have excess SONs
+        if (config.getTiers().getFather().isEnabled() && sons.size() > config.getTiers().getSon().getRetentionCount()) {
+            BackupMetadata oldestSon = findOldestBackup(sons);
 
-            if (fathers.isEmpty() || (now - fathers.get(0).getCreatedAt() >= fatherInterval)) {
-                BackupMetadata oldestSon = findOldestBackup(sons);
-
-                if (oldestSon != null && (now - oldestSon.getCreatedAt() >= fatherInterval)) {
-                    logger.info("Promoting SON backup {} to FATHER", oldestSon.getFilename());
-                    oldestSon.promote(BackupTier.FATHER);
-                    index.updateBackup(oldestSon);
-                    sons.remove(oldestSon);
-                    fathers.add(0, oldestSon);
-                }
+            if (oldestSon != null) {
+                logger.info("Promoting SON backup {} to FATHER (SON retention limit reached)", oldestSon.getFilename());
+                oldestSon.promote(BackupTier.FATHER);
+                index.updateBackup(oldestSon);
+                sons.remove(oldestSon);
+                fathers.add(0, oldestSon);
             }
         }
 
-        if (config.getTiers().getGrandfather().isEnabled() && !fathers.isEmpty()) {
-            long grandfatherInterval = config.getTiers().getGrandfather().getIntervalMillis();
+        // Promote FATHER to GRANDFATHER if we have excess FATHERs
+        if (config.getTiers().getGrandfather().isEnabled() && fathers.size() > config.getTiers().getFather().getRetentionCount()) {
+            BackupMetadata oldestFather = findOldestBackup(fathers);
 
-            if (grandfathers.isEmpty() || (now - grandfathers.get(0).getCreatedAt() >= grandfatherInterval)) {
-                BackupMetadata oldestFather = findOldestBackup(fathers);
-
-                if (oldestFather != null && (now - oldestFather.getCreatedAt() >= grandfatherInterval)) {
-                    logger.info("Promoting FATHER backup {} to GRANDFATHER", oldestFather.getFilename());
-                    oldestFather.promote(BackupTier.GRANDFATHER);
-                    index.updateBackup(oldestFather);
-                    fathers.remove(oldestFather);
-                    grandfathers.add(0, oldestFather);
-                }
+            if (oldestFather != null) {
+                logger.info("Promoting FATHER backup {} to GRANDFATHER (FATHER retention limit reached)", oldestFather.getFilename());
+                oldestFather.promote(BackupTier.GRANDFATHER);
+                index.updateBackup(oldestFather);
+                fathers.remove(oldestFather);
+                grandfathers.add(0, oldestFather);
             }
         }
     }
