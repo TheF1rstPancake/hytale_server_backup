@@ -18,7 +18,7 @@ WorldKeeper uses a tiered retention strategy (Grandfather-Father-Son) that keeps
 
 **Total: 23 backups (~7 GB at 304 MB/backup) covering up to 4 weeks of history.**
 
-New backups always start as Snapshots. The oldest Snapshot is promoted to a Daily when it's 24+ hours old, and the oldest Daily is promoted to an Archive when it's 7+ days old. Excess backups in each tier are deleted automatically. All intervals and retention counts are configurable.
+New backups always start as Snapshots. When the Snapshot limit is reached, the oldest Snapshot is promoted to a Daily. When the Daily limit is reached, the oldest Daily is promoted to an Archive. This ensures you always have the configured number of backups at each tier, creating a smooth rotation from recent to historical backups. All intervals and retention counts are configurable.
 
 ## Features
 
