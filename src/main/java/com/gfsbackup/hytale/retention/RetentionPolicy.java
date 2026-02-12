@@ -52,11 +52,24 @@ public class RetentionPolicy {
             BackupMetadata oldestSon = findOldestBackup(sons);
 
             if (oldestSon != null) {
-                logger.info("Promoting SON backup {} to FATHER (SON retention limit reached)", oldestSon.getFilename());
-                oldestSon.promote(BackupTier.FATHER);
-                index.updateBackup(oldestSon);
-                sons.remove(oldestSon);
-                fathers.add(0, oldestSon);
+                // Check if we already have a FATHER for this time bucket
+                long fatherIntervalMs = config.getTiers().getFather().getIntervalMillis();
+                BackupMetadata existingFather = findBackupInTimeBucket(fathers, oldestSon.getCreatedAt(), fatherIntervalMs);
+
+                if (existingFather != null) {
+                    // Already have a FATHER for this time period, just delete the old SON
+                    logger.info("Deleting SON backup {} (FATHER already exists for this time period: {})",
+                            oldestSon.getFilename(), existingFather.getFilename());
+                    deleteBackup(oldestSon);
+                    sons.remove(oldestSon);
+                } else {
+                    // No FATHER for this time period yet, promote it
+                    logger.info("Promoting SON backup {} to FATHER (SON retention limit reached)", oldestSon.getFilename());
+                    oldestSon.promote(BackupTier.FATHER);
+                    index.updateBackup(oldestSon);
+                    sons.remove(oldestSon);
+                    fathers.add(0, oldestSon);
+                }
             }
         }
 
@@ -65,11 +78,24 @@ public class RetentionPolicy {
             BackupMetadata oldestFather = findOldestBackup(fathers);
 
             if (oldestFather != null) {
-                logger.info("Promoting FATHER backup {} to GRANDFATHER (FATHER retention limit reached)", oldestFather.getFilename());
-                oldestFather.promote(BackupTier.GRANDFATHER);
-                index.updateBackup(oldestFather);
-                fathers.remove(oldestFather);
-                grandfathers.add(0, oldestFather);
+                // Check if we already have a GRANDFATHER for this time bucket
+                long grandfatherIntervalMs = config.getTiers().getGrandfather().getIntervalMillis();
+                BackupMetadata existingGrandfather = findBackupInTimeBucket(grandfathers, oldestFather.getCreatedAt(), grandfatherIntervalMs);
+
+                if (existingGrandfather != null) {
+                    // Already have a GRANDFATHER for this time period, just delete the old FATHER
+                    logger.info("Deleting FATHER backup {} (GRANDFATHER already exists for this time period: {})",
+                            oldestFather.getFilename(), existingGrandfather.getFilename());
+                    deleteBackup(oldestFather);
+                    fathers.remove(oldestFather);
+                } else {
+                    // No GRANDFATHER for this time period yet, promote it
+                    logger.info("Promoting FATHER backup {} to GRANDFATHER (FATHER retention limit reached)", oldestFather.getFilename());
+                    oldestFather.promote(BackupTier.GRANDFATHER);
+                    index.updateBackup(oldestFather);
+                    fathers.remove(oldestFather);
+                    grandfathers.add(0, oldestFather);
+                }
             }
         }
     }
@@ -120,5 +146,24 @@ public class RetentionPolicy {
             }
         }
         return oldest;
+    }
+
+    /**
+     * Finds a backup that falls within the same time bucket as the given timestamp.
+     * Time buckets are determined by dividing timestamps by the interval.
+     * For example, with a 1-day (1440 minute) interval, all backups from the same day
+     * will be in the same bucket.
+     */
+    private BackupMetadata findBackupInTimeBucket(List<BackupMetadata> backups, long timestamp, long intervalMs) {
+        long targetBucket = timestamp / intervalMs;
+
+        for (BackupMetadata backup : backups) {
+            long backupBucket = backup.getCreatedAt() / intervalMs;
+            if (backupBucket == targetBucket) {
+                return backup;
+            }
+        }
+
+        return null;
     }
 }
